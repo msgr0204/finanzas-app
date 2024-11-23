@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-
+import { v4 as uuidv4 } from "uuid"; // Importar la función para generar IDs únicos
 
 interface Transaccion {
+  id:string;
   concepto: string;
   monto: number;
   tipo: "Ingreso" | "Gasto";
@@ -23,9 +24,14 @@ const Formulario: React.FC<FormularioProps> = ({ onAgregarTransaccion }) => {
       alert("Por favor, ingresa un concepto válido y un monto positivo.");
       return;
     }
-
+    const nuevaTransaccion = {
+      id: uuidv4(), // Generar un ID único
+      concepto,
+      monto: Number(monto),
+      tipo,
+    };
     // Envía la transacción al componente padre
-    onAgregarTransaccion({ concepto, monto: Number(monto) ,tipo});
+    onAgregarTransaccion(nuevaTransaccion);
 
     // Limpia los campos del formulario
     setConcepto("");

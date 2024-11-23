@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Formulario from "./components/formulario";
+import ListaTransacciones from "./components/ListaTransacciones";
 
-interface Transaccion {
+
+export interface Transaccion {
+  id:string;
   concepto: string;
   monto: number;
   tipo: 'Ingreso' | 'Gasto';
 }
 
 const App: React.FC = () => {
-  const [transacciones, setTransacciones] = useState<Transaccion[]>([]);
+  const [transacciones, setTransacciones] = useState<Transaccion[]>(leerDesdeStorage());
 
   const agregarTransaccion = (transaccion: Transaccion) => {
     setTransacciones((prev) => [...prev, transaccion]);
@@ -24,10 +27,16 @@ const App: React.FC = () => {
 
   const saldo = totalIngresos - totalGastos;
 
+  // Guardar datos en localStorage cada vez que cambien las transacciones
+  useEffect(() => {
+    localStorage.setItem("transacciones", JSON.stringify(transacciones));
+  }, [transacciones]);
+
   return (
     <div>
       <Header />
       <Formulario onAgregarTransaccion={agregarTransaccion} />
+      <ListaTransacciones Transacciones={transacciones}/>
       <h2>Lista de Transacciones</h2>
       <table>
         <thead>
@@ -38,8 +47,8 @@ const App: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {transacciones.map((t, index) => (
-            <tr key={index}>
+          {transacciones.map((t,index) => (
+            <tr key={t.id}>
               <td>{t.concepto}</td>
               <td>${t.monto}</td>
               <td>{t.tipo}</td>
@@ -55,5 +64,15 @@ const App: React.FC = () => {
 
   );
 };
+
+function leerDesdeStorage() {
+
+  // Leer desde localStorage al inicializar
+  
+  const savedTransactions = localStorage.getItem("transacciones");
+  console.log('si entra', savedTransactions)
+  return savedTransactions ? JSON.parse(savedTransactions) : [];
+
+}
 
 export default App;
