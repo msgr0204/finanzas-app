@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import Header from "./components/Header";
+import Formulario from "./components/formulario";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface Transaccion {
+  concepto: string;
+  monto: number;
+  tipo: 'Ingreso' | 'Gasto';
 }
 
-export default App
+const App: React.FC = () => {
+  const [transacciones, setTransacciones] = useState<Transaccion[]>([]);
+
+  const agregarTransaccion = (transaccion: Transaccion) => {
+    setTransacciones((prev) => [...prev, transaccion]);
+  };
+  const totalIngresos = transacciones
+    .filter((t) => t.tipo === "Ingreso")
+    .reduce((acc, t) => acc + t.monto, 0);
+
+  const totalGastos = transacciones
+    .filter((t) => t.tipo === "Gasto")
+    .reduce((acc, t) => acc + t.monto, 0);
+
+  const saldo = totalIngresos - totalGastos;
+
+  return (
+    <div>
+      <Header />
+      <Formulario onAgregarTransaccion={agregarTransaccion} />
+      <h2>Lista de Transacciones</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Concepto</th>
+            <th>Monto</th>
+            <th>Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transacciones.map((t, index) => (
+            <tr key={index}>
+              <td>{t.concepto}</td>
+              <td>${t.monto}</td>
+              <td>{t.tipo}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h3>Resumen</h3>
+      <p><strong>Ingresos Totales:</strong> ${totalIngresos}</p>
+      <p><strong>Gastos Totales:</strong> ${totalGastos}</p>
+      <p><strong>Saldo:</strong> ${saldo}</p>
+    </div>
+
+  );
+};
+
+export default App;
