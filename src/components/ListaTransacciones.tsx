@@ -1,19 +1,19 @@
 import React from "react";
-import {Transaccion}from'../App'
+import { useTransacciones } from "../context/TransaccionesContext";
 
-interface TransaccionListProps {
-  Transacciones: Transaccion[];
-}
 
-const ListaTransacciones: React.FC<TransaccionListProps> = ({ Transacciones }) => {
+const ListaTransacciones: React.FC= ( ) => {
+
+    const { transacciones } = useTransacciones(); // Accedemos a las transacciones desde el contexto
+
   return (
     <div>
       <h2>Transacciones</h2>
-      {Transacciones.length === 0 ? (
+      {transacciones.length === 0 ? (
         <p>No hay transacciones registradas.</p>
       ) : (
         <ul>
-          {Transacciones.map((transaccion, index) => (
+          {transacciones.map((transaccion) => (
             <li key={transaccion.id}>
               <span>{transaccion.concepto}</span> -{" "}
               <span>

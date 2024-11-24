@@ -1,10 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import { TransaccionesProvider } from "./context/TransaccionesContext"; // Usamos TransaccionesProvider
+import "./index.css";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      {/* Aquí estamos envolviendo nuestra aplicación con el proveedor */}
+      <TransaccionesProvider>
+        <App />
+      </TransaccionesProvider>
+    </BrowserRouter>
+  </React.StrictMode>
+);

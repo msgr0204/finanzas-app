@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid"; // Importar la función para generar IDs únicos
+import { useTransacciones } from "../context/TransaccionesContext";
 
-interface Transaccion {
-  id:string;
-  concepto: string;
-  monto: number;
-  tipo: "Ingreso" | "Gasto";
-}
 
-interface FormularioProps {
-  onAgregarTransaccion: (transaccion: Transaccion) => void;
-}
-
-const Formulario: React.FC<FormularioProps> = ({ onAgregarTransaccion }) => {
+const Formulario: React.FC = () => {
+  const { agregarTransaccion } = useTransacciones();
   const [concepto, setConcepto] = useState<string>("");
   const [monto, setMonto] = useState<number | "">("");
   const [tipo, setTipo] = useState<"Ingreso" | "Gasto">("Ingreso");
@@ -30,8 +22,7 @@ const Formulario: React.FC<FormularioProps> = ({ onAgregarTransaccion }) => {
       monto: Number(monto),
       tipo,
     };
-    // Envía la transacción al componente padre
-    onAgregarTransaccion(nuevaTransaccion);
+    agregarTransaccion(nuevaTransaccion);
 
     // Limpia los campos del formulario
     setConcepto("");
