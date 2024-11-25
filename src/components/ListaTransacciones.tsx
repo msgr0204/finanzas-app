@@ -6,7 +6,7 @@ const ListaTransacciones: React.FC = () => {
 
   return (
     <div>
-      <h2 className="text-lg font-bold mb-4 text-center ">Transacciones</h2>
+      <h2 className="text-lg font-extrabold mb-4 text-center ">Transacciones</h2>
       {transacciones.length === 0 ? (
         <p>No hay transacciones registradas.</p>
       ) : (
